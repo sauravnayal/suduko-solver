@@ -42,6 +42,7 @@
     /* border: 2px solid #493787; */
     /* border-radius:3px; */
     overflow: hidden;
+    gap: 3px;
     /* background-color: #333456; */
 }
 .sudoku input[type=number]{
@@ -52,6 +53,7 @@
     color: white;
     border-radius: 3px;
     background-color: #121212;
+    
 }
 /* Remove up and down arrows from input number */
 input[type=number]::-webkit-outer-spin-button,
@@ -69,10 +71,17 @@ input[type=number] {
     border: none;
     font-size: 1rem;
     font-weight: 700;
-    background-color: #493787;
+    background-color: #for (let i = 0; i < 9; i++) {
+        for (let j = 0; j < 9; j++) {
+            let cellValue = document.getElementById(`cell-${i}-${j}`);
+            //error statement call
+            cellValue.value = grid[i][j];
+        }
+    };
     color: white;
     transition: background-color .35s ease;
     border-radius: 20px;
+    cursor: pointer;
 }
 .btn:hover{
     background-color: #302178;
@@ -82,4 +91,12 @@ input[type=number] {
     justify-content: center;
     align-items: center;
     gap: 20px;
+}
+
+.note{
+    font-size: 1.5rem;
+    font-family: cursive;
+}
+.note span{
+    color: red;
 }
