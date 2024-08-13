@@ -80,6 +80,7 @@ clear_btn.addEventListener("click",function(){
         for (let j = 0; j < 9; j++) {
             let cellValue = document.getElementById(`cell-${i}-${j}`);
             cellValue.value = '';
+            cellValue.style.backgroundColor="#121212"
         }
     }
 })
