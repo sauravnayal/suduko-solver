@@ -1,86 +1,80 @@
-function getInputValues() {
-    let grid = [];
+// Function to check if placing a number is valid
+function isValid(board, row, col, num) {
+    for (let i = 0; i < 9; i++) {
+        if (board[row][i] == num || board[i][col] == num || 
+            board[3 * Math.floor(row / 3) + Math.floor(i / 3)][3 * Math.floor(col / 3) + i % 3] == num) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Backtracking algorithm to solve the Sudoku
+function solveSudoku(board) {
+    for (let i = 0; i < 9; i++) {
+        for (let j = 0; j < 9; j++) {
+            if (board[i][j] == '.') {
+                for (let num = 1; num <= 9; num++) {
+                    if (isValid(board, i, j, num)) {
+                        board[i][j] = num;
+                        if (solveSudoku(board)) {
+                            return true;
+                        } else {
+                            board[i][j] = '.';
+                        }
+                    }
+                }
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+// Function to read the board from the input fields
+function readBoard() {
+    let board = [];
     for (let i = 0; i < 9; i++) {
         let row = [];
         for (let j = 0; j < 9; j++) {
             let cell = document.getElementById(`cell-${i}-${j}`);
             let cellValue = cell.value;
-            //error statement call
-            row.push(cellValue ? parseInt(cellValue) : 0);
-            
+            row.push(cellValue === '' ? '.' : cellValue);
+            if(cellValue==='') cell.style.backgroundColor="#493787"
         }
-        grid.push(row);
+        board.push(row);
     }
-    return grid;
+    return board;
 }
 
-function solve(grid) {
+// Function to write the solved board back to the input fields
+function writeBoard(board) {
     for (let i = 0; i < 9; i++) {
         for (let j = 0; j < 9; j++) {
-            if (grid[i][j] == 0) {
-                for (let c = 1; c <= 9; c++) {
-                    if (isValid(grid, i, j, c)) {
-                        grid[i][j] = c;
-                        if (solve(grid)) {
-                            return true;
-                        } else {
-                            grid[i][j] = 0;
-                        }
-                    }
-                }
-                return false;  // backtrack
-            }
+            document.getElementById(`cell-${i}-${j}`).value = board[i][j] !== '.' ? board[i][j] : '';
         }
     }
-    return true;
-}
-function isValid(grid, row, col, c) {
-    for (let i = 0; i < 9; i++) {
-        if (grid[row][i] == c || grid[i][col] == c) {
-            return false;
-        }
-        // Calculate the starting row and column of the 3x3 sub-grid
-        let subGridRow = 3 * Math.floor(row / 3) + Math.floor(i / 3);
-        let subGridCol = 3 * Math.floor(col / 3) + (i % 3);
-        if (grid[subGridRow][subGridCol] == c) {
-            return false;
-        }
-    }
-    return true;
 }
 
-
-const grid = getInputValues();
-
-const solve_btn = document.getElementById("solve");
-solve_btn.addEventListener("click", function () {
+// Function to clear the board
+function clearBoard() {
     for (let i = 0; i < 9; i++) {
         for (let j = 0; j < 9; j++) {
-            let cellValue = document.getElementById(`cell-${i}-${j}`);
-            if(cellValue.value==0)
-            cellValue.style.backgroundColor = "#493787";
+            document.getElementById(`cell-${i}-${j}`).value = '';
+            document.getElementById(`cell-${i}-${j}`).style.backgroundColor = "#121212";
         }
     }
-    const sol = solve(grid);
-    console.log(grid);
-    if (sol == true) {
-        for (let i = 0; i < 9; i++) {
-            for (let j = 0; j < 9; j++) {
-                let cellValue = document.getElementById(`cell-${i}-${j}`);
-                //error statement call
-                cellValue.value = grid[i][j];
-            }
-        }
+}
+
+// Solve button event listener
+document.getElementById('solve').addEventListener('click', function() {
+    let board = readBoard();
+    if (solveSudoku(board)) {
+        writeBoard(board);
+    } else {
+        alert('No solution exists!');
     }
 });
 
-const clear_btn = document.getElementById("clear");
-clear_btn.addEventListener("click",function(){
-    for (let i = 0; i < 9; i++) {
-        for (let j = 0; j < 9; j++) {
-            let cellValue = document.getElementById(`cell-${i}-${j}`);
-            cellValue.value = '';
-            cellValue.style.backgroundColor="#121212"
-        }
-    }
-})
+// Clear button event listener
+document.getElementById('clear').addEventListener('click', clearBoard);
