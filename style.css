@@ -47,9 +47,9 @@
     outline: 1px solid black;
     text-align: center;
     /* background-color: transparent; */
-    color: white;
+    color: rgb(0, 0, 0);
     border-radius: 3px;
-    background-color: #121212;
+    background-color: #dcdcdc;
     
 }
 
